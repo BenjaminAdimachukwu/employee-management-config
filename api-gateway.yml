@@ -1,0 +1,60 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1
+        - id: employee-service
+          uri: lb://employee-service  
+          predicates:
+            - Path=/api/employees/**, /api/departments/**
+          filters:
+            - StripPrefix=1
+        - id: discovery-service
+          uri: http://localhost:8761
+          predicates:
+            - Path=/eureka/web/**
+          filters:
+            - SetPath=/
+        - id: config-server
+          uri: http://localhost:8888
+          predicates:
+            - Path=/config/**
+          filters:
+            - SetPath=/
+
+# Eureka Client Configuration
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    registry-fetch-interval-seconds: 5
+
+# Actuator endpoints for monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,gateway
+  endpoint:
+    health:
+      show-details: always
+    gateway:
+      enabled: true
+
+# Logging
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.web: DEBUG
