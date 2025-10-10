@@ -1,0 +1,38 @@
+# SHARED CONFIGURATION - Applied to ALL services
+
+# Eureka Client Configuration (for all services that are Eureka clients)
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    healthcheck:
+      enabled: true
+    registry-fetch-interval-seconds: 5
+
+# Actuator endpoints for monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+# Logging configuration
+logging:
+  level:
+    com.darum.ng: INFO
+    org.springframework.cloud: INFO
+    org.hibernate.SQL: DEBUG  # Show SQL queries
+
+# Jackson configuration for JSON
+spring:
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    time-zone: UTC
+  
+  # Application name placeholder
+  application:
+    name: ${vcap.application.name:application}
