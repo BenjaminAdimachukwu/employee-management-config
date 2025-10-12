@@ -1,15 +1,9 @@
 server:
   port: 8082
 
-# ADD THIS
-eureka:
-  instance:
-    appname: ${spring.application.name}
-    instance-id: ${spring.application.name}:${server.port}
-  client:
-    initial-instance-info-replication-interval-seconds: 30
-
 spring:
+  application:
+    name: employee-service  # ← MAKE SURE THIS IS HERE!
   datasource:
     url: jdbc:postgresql://localhost:5432/employee_db
     username: user
@@ -19,9 +13,14 @@ spring:
       ddl-auto: update
     show-sql: true
 
+# SINGLE eureka section with ALL configuration
 eureka:
+  instance:
+    appname: ${spring.application.name}
+    instance-id: ${spring.application.name}:${server.port}
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
-    register-with-eureka: true      # ← Move this up one level
-    fetch-registry: true            # ← Move this up one level
+    register-with-eureka: true
+    fetch-registry: true
+    initial-instance-info-replication-interval-seconds: 30
