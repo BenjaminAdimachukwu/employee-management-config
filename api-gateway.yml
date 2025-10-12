@@ -1,6 +1,15 @@
 server:
   port: 8080
 
+
+# ADDED THIS - Delay Eureka registration until after config is loaded
+eureka:
+  instance:
+    appname: ${spring.application.name}  # Force Eureka to use config name
+    instance-id: ${spring.application.name}:${server.port}
+  client:
+    initial-instance-info-replication-interval-seconds: 30
+
 spring:
   cloud:
     gateway:
