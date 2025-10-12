@@ -1,6 +1,15 @@
 server:
   port: 8081
 
+
+# ADD THIS
+eureka:
+  instance:
+    appname: ${spring.application.name}
+    instance-id: ${spring.application.name}:${server.port}
+  client:
+    initial-instance-info-replication-interval-seconds: 30
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/employee_db
