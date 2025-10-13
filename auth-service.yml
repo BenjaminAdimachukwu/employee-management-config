@@ -3,24 +3,42 @@ server:
 
 spring:
   application:
-    name: auth-service  # ← MAKE SURE THIS IS HERE!
+    name: auth-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/employee_db
-    username: user
-    password: 
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:employee_db}
+    username: ${DB_USERNAME:}
+    password: ${DB_PASSWORD:}
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
 
-# SINGLE eureka section with ALL configuration
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:default-insecure-fallback-secret}
+  expiration: ${JWT_EXPIRATION:86400000}
+
+# Eureka Client
 eureka:
-  instance:
-    appname: ${spring.application.name}
-    instance-id: ${spring.application.name}:${server.port}
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
-    register-with-eureka: true
-    fetch-registry: true
-    initial-instance-info-replication-interval-seconds: 30
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka/}
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.darum.ng.auth: INFO
+    org.springframework.security: DEBUG
