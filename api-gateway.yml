@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: api-gateway  # ← MAKE SURE THIS IS HERE!
+    name: api-gateway
   cloud:
     gateway:
       discovery:
@@ -36,18 +36,14 @@ spring:
           filters:
             - SetPath=/
 
-# SINGLE eureka section with ALL configuration
+# Eureka Client
 eureka:
-  instance:
-    appname: ${spring.application.name}
-    instance-id: ${spring.application.name}:${server.port}
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka/}
     registry-fetch-interval-seconds: 5
-    initial-instance-info-replication-interval-seconds: 30
 
-# Actuator endpoints for monitoring
+# Actuator
 management:
   endpoints:
     web:
@@ -59,8 +55,6 @@ management:
     gateway:
       enabled: true
 
-# Logging
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
-    org.springframework.web: DEBUG
