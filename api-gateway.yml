@@ -16,13 +16,13 @@ spring:
           predicates:
             - Path=/auth/**
           filters:
-            - StripPrefix=0
+            - StripPrefix=1
         - id: employee-service
           uri: lb://employee-service  
           predicates:
             - Path=/api/employees/**, /api/departments/**
           filters:
-            - StripPrefix=1
+            - StripPrefix=0
         - id: discovery-service
           uri: http://localhost:8761
           predicates:
